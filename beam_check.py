@@ -120,6 +120,32 @@ def calculate_beam_check(
     # Determine stress check
     stress_check = "PASS" if stress_utilisation <=1 else "FAIL"
 
+    # Extract beam properties
+    youngs_modulus_pa = si_values['youngs_modulus_pa']
+    second_moment_m4 = si_values['second_moment_m4']
+
+    # Calculate maximum midspan deflection 
+    deflection_m = (
+        5 * load_n_per_m * span_m ** 4
+    ) / (
+        384* youngs_modulus_pa * second_moment_m4
+    )
+    # Convert meters to millimeters
+    deflection_mm = deflection_m * 1000
+
+    # Calculate maximum permitted deflection 
+    deflection_ratio = deflection_ratio
+    deflection_limit_m = span_m / deflection_ratio
+
+    # convert to millimeters
+    deflection_limit_mm = deflection_limit_m  * 1000
+
+    # Check deflection 
+    deflection_check = (
+        "PASS" if deflection_mm <= deflection_limit_mm else "FAIL"
+    )
+
+
 
 
 
@@ -127,11 +153,24 @@ def calculate_beam_check(
 
 
     return {
-    "bending_moment_n_m": bending_moment_n_m,
-    "bending_stress_pa": bending_stress_pa,
-    "bending_stress_mpa": bending_stress_mpa,
-    "stress_utilisation": stress_utilisation,
-    "stress_check": stress_check
+    "si": {
+        "bending_moment_n_m": bending_moment_n_m,
+        "bending_stress_pa": bending_stress_pa,
+        "deflection_m": deflection_m
+    },
+
+    "workbook_units": {
+        "bending_moment_kn_m": bending_moment_n_m / 1000,
+        "bending_stress_mpa": bending_stress_mpa,
+        "stress_utilisation": stress_utilisation,
+        "deflection_mm": deflection_mm,
+        "deflection_limit_mm": deflection_limit_mm
+    },
+
+    "checks": {
+        "stress": stress_check,
+        "deflection": deflection_check
+    }
 }
 
 
