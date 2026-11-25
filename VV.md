@@ -12,22 +12,22 @@ The following formulas were implemented:
 - **Midspan deflection:** \(\delta = 5wL^4/(384EI)\)
 - **Deflection limit:** \(L/n\)
 
-All input values are converted into SI units before calculations. The implementation also supports Imperial inputs and returns results in both SI and Imperial units.
+All input values are converted into SI units before calculation. The implementation supports both SI and Imperial inputs and returns results in both unit systems.
 
-Automated tests were executed using `pytest` to check:
-- Invalid inputs, including zero and negative values.
-- Unsupported unit systems.
-- Expected bending moment.
+Automated tests were executed using `pytest` to verify:
+
+- Input validation, including zero, negative, non-finite, and invalid values.
+- Handling of unsupported unit systems.
+- Expected bending moment and engineering calculation results.
 - Equivalence of SI and Imperial input calculations.
-- Engineering outputs against independently evaluated workbook values.
-
-The test suite passed successfully.
+- Stress and deflection pass/fail conditions.
+- Results against independently evaluated workbook formulas.
 
 ## 2. Validation
 
 Validation checks whether the implementation meets the intended engineering requirements.
 
-The Python results were compared with the expected results calculated from the source workbook for the reference beam:
+The Python results were compared with independently evaluated workbook formulas using the reference beam inputs:
 
 | Parameter | Expected result |
 |---|---:|
@@ -39,7 +39,7 @@ The Python results were compared with the expected results calculated from the s
 | Stress check | PASS |
 | Deflection check | PASS |
 
-The results agree with the independently evaluated workbook calculations.
+The Python results agree with the independently evaluated workbook calculations within the expected numerical precision.
 
 ## 3. Assumptions and Limitations
 
@@ -47,7 +47,7 @@ The results agree with the independently evaluated workbook calculations.
 - A uniformly distributed load acts over the full span.
 - Linear-elastic Euler-Bernoulli beam theory is assumed.
 - Material properties are assumed constant.
-- The implementation checks bending stress and deflection only; it does not cover shear, buckling, fatigue, or other structural design requirements.
+- The implementation checks bending stress and deflection only. It does not cover shear, buckling, fatigue, or other structural design requirements.
 
 ## 4. AI Usage Disclosure
 

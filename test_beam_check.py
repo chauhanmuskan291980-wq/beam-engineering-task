@@ -90,3 +90,20 @@ def test_si_and_imperial_results_are_equivalent():
         si_result["si"]["deflection_m"],
         rel=1e-5,
     )
+
+
+
+def test_si_results_match_workbook():
+    """Verify all SI results against expected workbook calculations."""
+
+    result = calculate_beam_check(**valid_si_inputs())
+    workbook = result["workbook_units"]
+
+    assert workbook["bending_moment_kn_m"] == pytest.approx(45.0)
+    assert workbook["bending_stress_mpa"] == pytest.approx(75.376884422)
+    assert workbook["stress_utilisation"] == pytest.approx(0.2740977615)
+    assert workbook["deflection_mm"] == pytest.approx(9.922968364)
+    assert workbook["deflection_limit_mm"] == pytest.approx(16.666666667)
+
+    assert result["checks"]["stress"] == "PASS"
+    assert result["checks"]["deflection"] == "PASS"
