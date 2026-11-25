@@ -201,9 +201,45 @@ def calculate_beam_check(
 
 
 
+def display_results(result):
+    """Display SI, Imperial and workbook-unit results."""
+
+    si = result["si"]
+    imperial = result["imperial"]
+    workbook = result["workbook_units"]
+    checks = result["checks"]
+
+    print("\n========== SI RESULTS ==========")
+
+    print(f"Bending Moment:       {si['bending_moment_n_m']:.2f} N·m")
+    print(f"Bending Stress:       {si['bending_stress_pa'] / 1e6:.2f} MPa")
+    print(f"Deflection:           {si['deflection_m'] * 1000:.2f} mm")
+    print(f"Deflection Limit:     {si['deflection_limit_m'] * 1000:.2f} mm")
+
+    print("\n========== IMPERIAL RESULTS ==========")
+
+    print(f"Bending Moment:       {imperial['bending_moment_kip_ft']:.2f} kip·ft")
+    print(f"Bending Stress:       {imperial['bending_stress_ksi']:.2f} ksi")
+    print(f"Deflection:           {imperial['deflection_inches']:.2f} inches")
+    print(f"Deflection Limit:     {imperial['deflection_limit_inches']:.2f} inches")
+
+    print("\n========== WORKBOOK RESULTS ==========")
+
+    print(f"Bending Moment:       {workbook['bending_moment_kn_m']:.2f} kN·m")
+    print(f"Bending Stress:       {workbook['bending_stress_mpa']:.2f} MPa")
+    print(f"Stress Utilisation:   {workbook['stress_utilisation']:.4f}")
+    print(f"Deflection:           {workbook['deflection_mm']:.2f} mm")
+    print(f"Deflection Limit:     {workbook['deflection_limit_mm']:.2f} mm")
+
+    print("\n========== ENGINEERING CHECKS ==========")
+
+    print(f"Stress Check:         {checks['stress']}")
+    print(f"Deflection Check:     {checks['deflection']}")
+
+
 if __name__ == "__main__":
 
-    resultInSi = calculate_beam_check(
+    result = calculate_beam_check(
         span=6,
         uniform_load=10,
         section_modulus=597,
@@ -211,20 +247,7 @@ if __name__ == "__main__":
         youngs_modulus=200,
         yield_strength=275,
         deflection_ratio=360,
-        unit_system="SI",
+        unit_system="SI"
     )
 
-    resultInImperial = calculate_beam_check(
-    span=19.68503937,
-    uniform_load=0.68521766,
-    section_modulus=36.43118,
-    second_moment_of_area=204.28539,
-    youngs_modulus=29007.54755,
-    yield_strength=39.88538,
-    deflection_ratio=360,
-    unit_system="Imperial"
-)
-
- 
-
-    print(resultInSi,resultInImperial)
+    display_results(result)
